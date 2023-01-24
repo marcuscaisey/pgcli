@@ -73,20 +73,13 @@ def pgcli_bindings(pgcli):
     @kb.add("c-space")
     def _(event):
         """
-        Initialize autocompletion at cursor.
-
-        If the autocompletion menu is not showing, display it with the
-        appropriate completions for the context.
-
-        If the menu is showing, select the next completion.
+        Accept suggestion.
         """
-        _logger.debug("Detected <C-Space> key.")
+        b = event.current_buffer
+        suggestion = b.suggestion
 
-        b = event.app.current_buffer
-        if b.complete_state:
-            b.complete_next()
-        else:
-            b.start_completion(select_first=False)
+        if suggestion:
+            b.insert_text(suggestion.text)
 
     @kb.add("enter", filter=completion_is_selected)
     def _(event):
