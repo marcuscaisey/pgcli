@@ -116,11 +116,17 @@ def pgcli_bindings(pgcli):
     @kb.add("c-p", filter=~has_selection)
     def _(event):
         """Move up in history."""
-        event.current_buffer.history_backward(count=event.arg)
+        if event.current_buffer.complete_state:
+            event.current_buffer.complete_previous(count=event.arg)
+        else:
+            event.current_buffer.history_backward(count=event.arg)
 
     @kb.add("c-n", filter=~has_selection)
     def _(event):
         """Move down in history."""
-        event.current_buffer.history_forward(count=event.arg)
+        if event.current_buffer.complete_state:
+            event.current_buffer.complete_next(count=event.arg)
+        else:
+            event.current_buffer.history_forward(count=event.arg)
 
     return kb
